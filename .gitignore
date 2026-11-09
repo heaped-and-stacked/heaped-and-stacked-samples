@@ -1,0 +1,7 @@
+target/
+out/
+.idea/
+*.iml
+
+# Our working task list: local only.
+TASKS.md
