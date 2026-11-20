@@ -5,10 +5,9 @@ import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
- * TODO
  * Replace the fail(...) with assertions in the following tests.
  */
 class ListRemoveByIndexOrValueTest {
@@ -22,7 +21,9 @@ class ListRemoveByIndexOrValueTest {
         numberList.remove(1);
 
         // Then - what does the list hold?
-        fail("Write an assertion on 'numberList'");
+        // element '2' was removed by index.
+        // The literal 1 is an int, which matches remove(int index) exactly. An exact match beats boxing.
+        assertEquals(List.of(1, 3), numberList);
     }
 
     @Test
@@ -34,7 +35,9 @@ class ListRemoveByIndexOrValueTest {
         numberList.remove(Integer.valueOf(1));
 
         // Then - what does the list hold?
-        fail("Write an assertion on 'numberList'");
+        // the element '1' was removed by value.
+        // Integer.valueOf(1) is an object, so remove(Object) is chosen.
+        assertEquals(List.of(2, 3), numberList);
     }
 
 }

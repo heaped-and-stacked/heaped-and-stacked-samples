@@ -6,10 +6,10 @@ import org.junit.jupiter.api.function.Executable;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
- * TODO
  * Replace the fail(...) with assertions in the following tests.
  */
 class HeapPollutionTest {
@@ -25,7 +25,8 @@ class HeapPollutionTest {
         final Executable addingAnInteger = () -> rawNames.add(42);
 
         // Then - does it work, or does it throw? (assertDoesNotThrow or assertThrows)
-        fail("Write an assertion on 'addingAnInteger'");
+        // It does not throw, because rawNames does not define a type. This is one of the main reasons to not use raw lists.
+        assertDoesNotThrow(addingAnInteger);
     }
 
     @Test
@@ -42,6 +43,9 @@ class HeapPollutionTest {
         };
 
         // Then - does it work, or does it throw? (assertDoesNotThrow or assertThrows)
-        fail("Write an assertion on 'readingTheSecondName'");
+        // Throws when trying to read the non string element from the List<String>. Would not throw if we read it from rawNames as object.
+        // The compiler inserts a cast to String where names.get(1) is read, and an Integer can't be cast to String.
+        assertThrows(ClassCastException.class, readingTheSecondName);
+        assertDoesNotThrow(() -> {final Object secondName = rawNames.get(1);});
     }
 }

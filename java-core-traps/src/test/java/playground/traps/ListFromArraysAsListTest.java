@@ -6,10 +6,10 @@ import org.junit.jupiter.api.function.Executable;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
- * TODO
  * Replace the fail(...) with assertions in the following tests.
  */
 class ListFromArraysAsListTest {
@@ -24,7 +24,8 @@ class ListFromArraysAsListTest {
         final Executable addingAName = () -> names.add("Carol");
 
         // Then - does it work, or does it throw? (assertDoesNotThrow or assertThrows)
-        fail("Write an assertion on 'addingAName'");
+        // Arrays.asList() returns a fixed-size view over the array, so add is not supported and throws.
+        assertThrows(UnsupportedOperationException.class, addingAName);
     }
 
     @Test
@@ -38,6 +39,7 @@ class ListFromArraysAsListTest {
 
         // Then - what is the first name in the list?
         final String firstName = names.getFirst();
-        fail("Write an assertion on 'firstName'");
+        // The list reads straight from the array behind it, so changing the array changes the list.
+        assertEquals("Zoe", firstName);
     }
 }

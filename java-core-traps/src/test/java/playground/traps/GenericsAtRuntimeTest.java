@@ -5,10 +5,9 @@ import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * TODO
  * Replace the fail(...) with assertions in the following tests.
  */
 class GenericsAtRuntimeTest {
@@ -23,6 +22,9 @@ class GenericsAtRuntimeTest {
         final boolean sameClass = strings.getClass() == integers.getClass();
 
         // Then - are they the same class?
-        fail("Write an assertion on 'sameClass'");
+        // yes - both are instantiated as new ArrayList<>(), so the .getClass() will return ArrayList.class for both.
+        // Type erasure removes <String> and <Integer> at compile time: at runtime there is no ArrayList<String> class,
+        // only ArrayList.
+        assertTrue(sameClass);
     }
 }

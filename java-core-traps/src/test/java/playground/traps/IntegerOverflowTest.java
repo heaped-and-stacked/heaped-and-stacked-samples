@@ -2,10 +2,10 @@ package playground.traps;
 
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * TODO
  * Replace the fail(...) with assertions in the following tests.
  */
 class IntegerOverflowTest {
@@ -19,7 +19,10 @@ class IntegerOverflowTest {
         final int absolute = Math.abs(smallest);
 
         // Then - is the result positive?
-        fail("Write an assertion on 'absolute'");
+        // Note that if the argument is equal to the value of Integer#MIN_VALUE, the most negative representable int value,
+        // the result is that same value, which is negative.
+        // In contrast, the absExact(int) method throws an ArithmeticException for this value.
+        assertTrue(absolute < 0);
     }
 
     @Test
@@ -31,6 +34,9 @@ class IntegerOverflowTest {
         final long millis = days * 24 * 60 * 60 * 1000;
 
         // Then - is it 2,592,000,000?
-        fail("Write an assertion on 'millis'");
+        // Numeric overflow, the value of millis is actually -1702967296.
+        // days * 24 * 60 * 60 * 1000 is calculated entirely in int, overflows, and only then widens to long.
+        // Starting with a long (30L * ...) fixes it.
+        assertEquals(-1702967296L, millis);
     }
 }

@@ -2,10 +2,10 @@ package playground.traps;
 
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * TODO
  * Replace the fail(...) with assertions in the following tests.
  */
 class ComparingBoxedNumbersTest {
@@ -20,7 +20,12 @@ class ComparingBoxedNumbersTest {
         final boolean same = firstId == secondId;
 
         // Then - are they the same?
-        fail("Write an assertion on 'same'");
+
+        // == compares the object references, not the numbers.
+        // Java silently rewrites 'Long firstId = 127L' as 'Long firstId = Long.valueOf(127L)'
+        // For the range -128 to 127, Java keeps one wrapper object per value and reuses it
+        // The comparison will be 'Reference to box 127L is the same as Reference to box 127L' - returns true
+        assertTrue(same);
     }
 
     @Test
@@ -33,7 +38,9 @@ class ComparingBoxedNumbersTest {
         final boolean same = firstId == secondId;
 
         // Then - are they the same?
-        fail("Write an assertion on 'same'");
+        // 128 is outside the cache, so each id gets a new primitive wrapper.
+        // Two different objects, so == is false, even though both hold 128.
+        assertFalse(same);
     }
 
     @Test
@@ -46,6 +53,7 @@ class ComparingBoxedNumbersTest {
         final boolean equal = firstId.equals(secondId);
 
         // Then - are they equal?
-        fail("Write an assertion on 'equal'");
+        // equals compares the value inside the wrappers, so it’s true for any two Longs that hold the same number.
+        assertTrue(equal);
     }
 }

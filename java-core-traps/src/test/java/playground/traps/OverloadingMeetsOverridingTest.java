@@ -2,10 +2,9 @@ package playground.traps;
 
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
- * TODO
  * Replace the fail(...) with assertions in the following tests.
  */
 class OverloadingMeetsOverridingTest {
@@ -23,6 +22,16 @@ class OverloadingMeetsOverridingTest {
         final String emailNotifierNull = emailNotifier.send(null);
 
         // Then - which method runs each time? Each one returns its own name.
-        fail("Write assertions on 'notifierHello', 'emailNotifierHello', 'notifierNull', 'emailNotifierNull'");
+
+        // notifier is declared as Notifier, which only has String send(Object message),
+        // so the compiler picks it for both "Hello" and null.
+        // At runtime the object is an EmailNotifier, so its override runs.
+        assertEquals("EmailNotifier Object", notifierHello);
+        assertEquals("EmailNotifier Object", notifierNull);
+
+        // emailNotifier is declared as EmailNotifier, so the compiler can see both String send(Object) and String send(String)
+        // and picks the most specific one, also for null.
+        assertEquals("EmailNotifier String", emailNotifierHello);
+        assertEquals("EmailNotifier String", emailNotifierNull);
     }
 }

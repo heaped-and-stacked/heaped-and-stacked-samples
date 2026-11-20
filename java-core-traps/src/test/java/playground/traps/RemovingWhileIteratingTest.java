@@ -4,12 +4,13 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
 
 import java.util.ArrayList;
+import java.util.ConcurrentModificationException;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
- * TODO
  * Replace the fail(...) with assertions in the following tests.
  */
 class RemovingWhileIteratingTest {
@@ -29,7 +30,10 @@ class RemovingWhileIteratingTest {
         };
 
         // Then - does it work, or does it throw? (assertDoesNotThrow or assertThrows)
-        fail("Write an assertion on 'removingOldEmails'");
+        // a for-each loop uses an Iterator.
+        // emails.remove(...) changes the list's modification count (modCount), which the iterator copied when it was created.
+        // On the next next() the iterator sees the count no longer matches its copy and throws.
+        assertThrows(ConcurrentModificationException.class, removingOldEmails);
     }
 
     @Test
@@ -41,6 +45,7 @@ class RemovingWhileIteratingTest {
         emails.removeIf(email -> email.endsWith("@old.com"));
 
         // Then - what does the list hold?
-        fail("Write an assertion on 'emails'");
+        // removeIf lets the list do the removal itself, so no outside iterator is left out of sync.
+        assertEquals(List.of("bob@new.com", "carol@new.com"), emails);
     }
 }

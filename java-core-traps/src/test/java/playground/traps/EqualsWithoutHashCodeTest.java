@@ -5,10 +5,10 @@ import org.junit.jupiter.api.Test;
 import java.util.HashSet;
 import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 /**
- * TODO
  * Replace the fail(...) with assertions in the following tests.
  */
 class EqualsWithoutHashCodeTest {
@@ -24,7 +24,10 @@ class EqualsWithoutHashCodeTest {
 
         // Then - what is the size of the set
         final int size = books.size();
-        fail("Write an assertion on 'size'");
+        // Hashcode is not overridden in Book, so the implementation from Object is used,
+        // which assigns a new hash to each object created
+        // The 2 created objects in our test will not have the same hashcode, so both elements will be added to the set
+        assertEquals(2, size);
     }
 
     @Test
@@ -37,6 +40,8 @@ class EqualsWithoutHashCodeTest {
 
         // Then - does the set contain an equal copy?
         final boolean containsCopy = books.contains(new Book("Dune", "fiction"));
-        fail("Write an assertion on 'containsCopy'");
+
+        // The hashcode of the copy does not match the hashcode of the element in the set, so equals() is never checked
+        assertFalse(containsCopy);
     }
 }

@@ -5,10 +5,11 @@ import org.junit.jupiter.api.Test;
 import java.util.HashSet;
 import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * TODO
  * Replace the fail(...) with assertions in the following tests.
  */
 class ChangingAKeyInASetTest {
@@ -25,7 +26,9 @@ class ChangingAKeyInASetTest {
 
         // Then - is 'anotherAlice' with the same name and email found in the set?
         final boolean containsAnotherAlice = users.contains(anotherAlice);
-        fail("Write an assertion on 'containsAnotherAlice'");
+
+        // hashCode produces the same value for both objects, and equals() returns true
+        assertTrue(containsAnotherAlice);
     }
 
     @Test
@@ -41,9 +44,15 @@ class ChangingAKeyInASetTest {
 
         // Then - is 'alice' found in the set, or not?
         final boolean containsAlice = users.contains(alice);
+        // The object added to the set produced a different hashCode than the current state of the object does.
+        // hashCodes will not match and equals will not be checked
+        assertFalse(containsAlice);
+
         // Then - is 'anotherAlice', with Alice's old email, found in the set?
         final boolean containsAnotherAlice = users.contains(anotherAlice);
-        fail("Write assertions on 'containsAlice', 'containsAnotherAlice'");
+        // The object added to the set produced the same hashCode as anotherAlice
+        // When the equals() check is done though, the updated value of alice's email will be used, returning false
+        assertFalse(containsAnotherAlice);
     }
 
     @Test
@@ -59,6 +68,8 @@ class ChangingAKeyInASetTest {
 
         // Then - how many users are in the set, after adding alice twice?
         final int size = users.size();
-        fail("Write an assertion on 'size'");
+        // The object added to the set produced a different hashCode from the new one
+        // equals is not checked and the element is added to the set again.
+        assertEquals(2, size);
     }
 }

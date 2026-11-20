@@ -6,10 +6,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.IntSupplier;
 
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
- * TODO
  * Replace the fail(...) with assertions in the following tests.
  */
 class ReturnAndFinallyTest {
@@ -30,7 +29,8 @@ class ReturnAndFinallyTest {
         final int result = returnFromTryAndReturnFinally.getAsInt();
 
         // Then - what does it return?
-        fail("Write an assertion on 'result'");
+        // Finally eats up the normal return value
+        assertEquals(20, result);
     }
 
     @Test
@@ -51,6 +51,9 @@ class ReturnAndFinallyTest {
         events.add("returned");
 
         // Then - what does it return, and in which order did the steps run?
-        fail("Write assertions on 'result', 'events'");
+        // The return value (10) is saved before finally runs, so finally can't change it,
+        // but finally still runs before the caller gets the result.
+        assertEquals(10, result);
+        assertEquals(List.of("try", "finally", "returned"), events);
     }
 }
