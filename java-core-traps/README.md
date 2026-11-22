@@ -1,13 +1,19 @@
 # Java core traps
 
-**A collection of "What does this code really do?" type of questions**
+**A collection of code samples showing less intuitive behavior for Java code**
 
-## Scope and goal
+This project attempts to gather a few common "traps", where naive intuition can fall short,
+and sometimes it comes down to understanding the rules and how they apply. 
+The rules come from two places: 
+- Java Language Specification, which the compiler and the JVM enforce
+- Contracts in the JDK's Javadoc, which mostly nobody enforces: break one and the code still runs, just wrongly.
 
-The code we look at may behave in unintuitive ways sometimes. This project attempts to gather a few common
-"traps", where naive intuition can fall short, and sometimes it comes down to knowing the rules and understanding how they apply.
+## Scope
 
-Exercises in here have a question-based style: they ask you to predict the behavior, then check your prediction with a test.
+- **Topics:** equality and hashing, numbers (`BigDecimal`, boxing, overflow), collections,
+  `finally`, overloading, generics
+- **Tools:** Java, JUnit 5
+- **Not covered:** concurrency, which has its own projects
 
 ## Exercises
 
@@ -44,12 +50,4 @@ Exercises in here have a question-based style: they ask you to predict the behav
 12. **`HeapPollution`** adds an `Integer` to a `List<String>` through a raw `List`, as old code
     might, then reads it back. It shows what erasure costs: the bad element gets in without an
     error, and the failure shows up later, somewhere else.
-
-## Takeaway
-
-Most of these surprises come from a handful of rules Java applies quietly (hash collections look
-by `hashCode` first, `BigDecimal` and boxed numbers have their own idea of equality, `finally`
-always runs, overloads are chosen at compile time and overrides at runtime, `int` arithmetic wraps
-around, generic types are gone once the code runs), and once you know them, code that looked
-strange becomes predictable.
 
